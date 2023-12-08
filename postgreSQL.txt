@@ -1,0 +1,100 @@
+. Client(NumClient,Nom,Prenom,Adress,Tel,Compte);
+. Films (NumFilm,Titre,Genre,Prix,NombreDVD);
+. Personne (NumPersonne,Nom,Prenom);
+. Locations (IdLocation,DateLoc,NbreJourLoc,Livraison,NumFilm,NumClient);
+. Reservation (IdReservation,DateRes,NbJourRes,NumFilm,NumClient);
+. Joue (NumPers,NumFilm);
+. Realise (NumPers,NumFilm);
+
+CREATE TABLE Client(
+    NumClient INT PRIMARY KEY,
+    Nom VARCHAR(255),
+    Prenom VARCHAR(255),
+    Adress VARCHAR(255),
+    Tel VARCHAR(255),
+    Compte VARCHAR(255)
+);
+
+INSERT INTO Client(NumClient, Nom, Prenom, Adress, Tel, Compte)
+VALUES (1, 'Dupont', 'Jean', '123 Rue de Paris', '0123456789', 'Compte1'),
+       (2, 'Martin', 'Pierre', '456 Rue de Lyon', '9876543210', 'Compte2');
+
+
+
+CREATE TABLE Films(
+    NumFilm INT PRIMARY KEY,
+    Titre VARCHAR(255),
+    Genre VARCHAR(255),
+    Prix DECIMAL,
+    NombreDVD INT,
+    NumClient INT,
+    FOREIGN KEY (NumClient) REFERENCES Client(NumClient)
+);
+
+INSERT INTO Films(NumFilm, Titre, Genre, Prix, NombreDVD, NumClient)
+VALUES (1, 'Film1', 'Comédie', 10.0, 5, 1),
+       (2, 'Film2', 'Drame', 15.0, 3, 2);
+
+
+
+CREATE TABLE Personne(
+    NumPersonne INT PRIMARY KEY,
+    Nom VARCHAR(255),
+    Prenom VARCHAR(255)
+);
+
+INSERT INTO Personne(NumPersonne, Nom, Prenom)
+VALUES (1, 'Smith', 'John'),
+       (2, 'Johnson', 'Robert');
+
+
+CREATE TABLE Locations(
+    IdLocation INT PRIMARY KEY,
+    DateLoc DATE,
+    NbreJourLoc INT,
+    Livraison VARCHAR(255),
+    NumFilm INT,
+    NumClient INT,
+    FOREIGN KEY (NumFilm) REFERENCES Films(NumFilm),
+    FOREIGN KEY (NumClient) REFERENCES Client(NumClient)
+);
+
+INSERT INTO Locations(IdLocation, DateLoc, NbreJourLoc, Livraison, NumFilm, NumClient)
+VALUES (1, '2023-10-15', 7, 'Oui', 1, 1),
+       (2, '2023-10-14', 5, 'Non', 2, 2);
+
+
+CREATE TABLE Reservation(
+    IdReservation INT PRIMARY KEY,
+    DateRes DATE,
+    NbJourRes INT,
+    NumFilm INT,
+    NumClient INT,
+    FOREIGN KEY (NumFilm) REFERENCES Films(NumFilm),
+    FOREIGN KEY (NumClient) REFERENCES Client(NumClient)
+);
+
+INSERT INTO Reservation(IdReservation, DateRes, NbJourRes, NumFilm, NumClient)
+VALUES (1, '2023-10-16', 7, 1, 1),
+       (2, '2023-10-17', 5, 2, 2);
+CREATE TABLE Joue(
+    NumPers INT,
+    NumFilm INT,
+    PRIMARY KEY (NumPers, NumFilm),
+    FOREIGN KEY (NumPers) REFERENCES Personne(NumPersonne),
+    FOREIGN KEY (NumFilm) REFERENCES Films(NumFilm)
+);
+
+INSERT INTO Joue(NumPers, NumFilm)
+VALUES (1, 1),
+       (2, 2);
+
+
+CREATE TABLE Realise(
+    NumPers INT,
+    NumFilm INT,
+    PRIMARY KEY (NumPers, NumFilm),
+    FOREIGN KEY (NumPers) REFERENCES Personne(NumPersonne),
+    FOREIGN KEY (NumFilm) REFERENCES Films(NumFilm)
+);
+
